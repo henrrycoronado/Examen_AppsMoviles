@@ -1,0 +1,19 @@
+# Justificacion de implementacion realizada
+
+## Arquitectura
+Utilize por comodidad y facilidad la arquitectura MVI, ya que es una que defendi y ya tenia previo conocimiento de la estructura y requerimientos que necesita este flujo.
+Por otro lado el manejo de acciones debe ser controlado por la interaccion con el "state" que se desea implementar, de ese modo, se implementa esta arquitectura para la interaccion, se crean sus respectivos contrato, view y viewModel.
+
+
+## Cambios
+Los cambios que realize estan en este orden:
+1. Partimos creando el main con un proyecto vacio
+2. Creamos una rama de referencia al main, en donde realizamos el desarrollo del ejercicio 1.
+3. En esta rama creamos directorios que corresponden a la arquitectura que definimos al igual que sus archivos, y sus funciones
+4. modificamos el mainActivity para acceder a este
+5. hacemos merge con la rama main
+6. creamos otra rama para el ejercicio "bonus"
+7. creamos su directorio y su archivo
+8. definimos su funcionalidad junto a su vista por su simplicidad
+9. redefinimos el mainActivity para ingresar a esta nueva funcionalidad
+10. hacemos merge con la rama main.
