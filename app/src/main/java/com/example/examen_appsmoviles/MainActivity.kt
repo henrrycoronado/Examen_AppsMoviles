@@ -17,6 +17,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.examen_appsmoviles.ui.theme.Examen_AppsMovilesTheme
 import com.example.examen_appsmoviles.excersice1.UsersScreen
+import com.example.examen_appsmoviles.bonus.FibonacciScreen
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -29,10 +30,20 @@ class MainActivity : ComponentActivity() {
                     Box(modifier = Modifier.padding(innerPadding)) {
                         NavHost(navController = navController, startDestination = "menu") {
                             composable("menu") {
-                                MenuScreen(onNavigateToActivity = { navController.navigate("users") })
+                                MenuScreen(
+                                    onNavigateToUsers = { navController.navigate("users") },
+                                    onNavigateToFibonacci = { navController.navigate("fibonacci") }
+                                )
                             }
                             composable("users") {
-                                ActivityScreenContainer(onBackClick = { navController.popBackStack() })
+                                ScreenContainer(onBackClick = { navController.popBackStack() }) {
+                                    UsersScreen()
+                                }
+                            }
+                            composable("fibonacci") {
+                                ScreenContainer(onBackClick = { navController.popBackStack() }) {
+                                    FibonacciScreen()
+                                }
                             }
                         }
                     }
@@ -43,7 +54,10 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-fun MenuScreen(onNavigateToActivity: () -> Unit) {
+fun MenuScreen(
+    onNavigateToUsers: () -> Unit,
+    onNavigateToFibonacci: () -> Unit
+) {
     Column(
         modifier = Modifier.fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -56,16 +70,27 @@ fun MenuScreen(onNavigateToActivity: () -> Unit) {
         )
 
         Button(
-            onClick = onNavigateToActivity,
+            onClick = onNavigateToUsers,
             modifier = Modifier.fillMaxWidth(0.7f).padding(8.dp)
         ) {
-            Text("Ir a Activity Screen")
+            Text("Ver Usuarios (Ejercicio 1)")
+        }
+
+        Button(
+            onClick = onNavigateToFibonacci,
+            modifier = Modifier.fillMaxWidth(0.7f).padding(8.dp),
+            colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.secondary)
+        ) {
+            Text("Calcular Fibonacci")
         }
     }
 }
 
 @Composable
-fun ActivityScreenContainer(onBackClick: () -> Unit) {
+fun ScreenContainer(
+    onBackClick: () -> Unit,
+    content: @Composable () -> Unit
+) {
     Column(modifier = Modifier.fillMaxSize()) {
         Box(
             modifier = Modifier.fillMaxWidth().padding(8.dp),
@@ -75,6 +100,8 @@ fun ActivityScreenContainer(onBackClick: () -> Unit) {
                 Icon(Icons.Default.ArrowBack, contentDescription = "Volver")
             }
         }
-        UsersScreen()
+        Box(modifier = Modifier.weight(1f)) {
+            content()
+        }
     }
 }
