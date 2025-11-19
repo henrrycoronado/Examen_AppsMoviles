@@ -4,14 +4,19 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
+import androidx.compose.foundation.layout.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
 import com.example.examen_appsmoviles.ui.theme.Examen_AppsMovilesTheme
+import com.example.examen_appsmoviles.excersice1.UsersScreen
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -19,11 +24,18 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             Examen_AppsMovilesTheme {
+                val navController = rememberNavController()
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    Greeting(
-                        name = "Android",
-                        modifier = Modifier.padding(innerPadding)
-                    )
+                    Box(modifier = Modifier.padding(innerPadding)) {
+                        NavHost(navController = navController, startDestination = "menu") {
+                            composable("menu") {
+                                MenuScreen(onNavigateToActivity = { navController.navigate("users") })
+                            }
+                            composable("users") {
+                                ActivityScreenContainer(onBackClick = { navController.popBackStack() })
+                            }
+                        }
+                    }
                 }
             }
         }
@@ -31,17 +43,38 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "Hello $name!",
-        modifier = modifier
-    )
+fun MenuScreen(onNavigateToActivity: () -> Unit) {
+    Column(
+        modifier = Modifier.fillMaxSize(),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center
+    ) {
+        Text(
+            text = "Examen Apps Móviles",
+            style = MaterialTheme.typography.headlineMedium,
+            modifier = Modifier.padding(bottom = 32.dp)
+        )
+
+        Button(
+            onClick = onNavigateToActivity,
+            modifier = Modifier.fillMaxWidth(0.7f).padding(8.dp)
+        ) {
+            Text("Ir a Activity Screen")
+        }
+    }
 }
 
-@Preview(showBackground = true)
 @Composable
-fun GreetingPreview() {
-    Examen_AppsMovilesTheme {
-        Greeting("Android")
+fun ActivityScreenContainer(onBackClick: () -> Unit) {
+    Column(modifier = Modifier.fillMaxSize()) {
+        Box(
+            modifier = Modifier.fillMaxWidth().padding(8.dp),
+            contentAlignment = Alignment.CenterStart
+        ) {
+            IconButton(onClick = onBackClick) {
+                Icon(Icons.Default.ArrowBack, contentDescription = "Volver")
+            }
+        }
+        UsersScreen()
     }
 }
